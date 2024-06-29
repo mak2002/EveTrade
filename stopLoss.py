@@ -79,7 +79,7 @@ class StopLossStrategy(Strategy):
 
         for symbol in self.symbol_list:
             self.symbolDictionary[symbol] = 1
-            print(symbol,self.symbolDictionary[symbol])
+            print('>>>>>>>>>>',symbol,self.symbolDictionary[symbol])
         
         for symbol in self.symbol_list:
             self.symbolDictionary[symbol] = pd.DataFrame(columns=columns)
@@ -89,6 +89,7 @@ class StopLossStrategy(Strategy):
         return self.symbol_data
 
     def calculate_long_short(self, df):
+        print('df:: ', df)
         price_short = None
 
         # price_short = df['Close'].ewm(span=self.short_period, min_periods=self.short_period, adjust=False).mean()[-1]
@@ -119,7 +120,7 @@ class StopLossStrategy(Strategy):
             for symbol in self.symbol_list:
 
                 data = self.data.get_latest_bars(symbol, N=1)
-
+                print('Data:: ', data)
 
                 self.symbolDictionary[symbol] = self.symbolDictionary[symbol].append(data)
 

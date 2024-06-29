@@ -1,0 +1,10 @@
+EVENT - MARKET SIGNAL ORDER FILL
+EVENT QUEUE - stores sub class objects
+DataHandler - ABC handles historical data and live stock market data
+Strategy - ABC genetates SignalEvents used by Portfolio Object
+Portfolio - ABC takes SignalEvents from Queue and generates order events that gets added to Queue
+ExecutionHandler - take OrderEvents from Queue then create fill events
+                    that describes fees,commision,slippage
+the Loop - all above component is wrapper in this Loop
+
+STOCK MARKET EVENT -> SIGNAL EVENT -> ORDER EVENT -> FILL EVENT

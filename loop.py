@@ -3,6 +3,8 @@ import time
 import os, os.path
 import datetime
 import warnings
+
+from simple import MovingAverageCrossoverStrategy
 warnings.filterwarnings("ignore")
 
 from event import (
@@ -11,23 +13,37 @@ from event import (
     OrderEvent,
     FillEvent
 )
-from data import HistoricCSVDataHandler
+from data import HistoricCSVDataHandler, HistoricMySQLDataHandler
 # from strategy import BuyAndHoldStrategy
 from portfolio import NaivePortfolio, Portfolio
 from execution import SimulatedExecutionHandler
 from stopLoss import StopLossStrategy
 
-start_date = datetime.date(2019, 5, 5)
+start_date = datetime.date(2001, 5, 5)
 
 CSV_DIR = os.path.join('csvs')
 
 event_queue = queue.Queue()
 
-symbolList = ['BALRAMPUR CHINI MILLS  ']
+symbolList = ['TATAMOTORS']
 
-data = HistoricCSVDataHandler(event_queue,CSV_DIR,symbolList)
+# Example usage:
+config = {
+    'user': 'root',      # Replace with your MySQL username
+    'host': 'localhost',
+    'port': 3306,
+    'database': 'main_stock_data'
+}
+
+# events = Queue()
+# symbol_list = ['AAPL', 'GOOG', 'MSFT']
+# data_handler = HistoricMySQLDataHandler(events, db_config, symbol_list)
+
+# data = HistoricCSVDataHandler(event_queue,CSV_DIR,symbolList)
+data = HistoricMySQLDataHandler(event_queue,config,symbolList)
 portfolio = NaivePortfolio(data, event_queue, start_date,symbolList)
-strategy = StopLossStrategy(data,event_queue,44,portfolio)
+strategy = MovingAverageCrossoverStrategy(data,event_queue)
+# strategy = StopLossStrategy(data,event_queue,44,portfolio)
 broker = SimulatedExecutionHandler(event_queue)
 
 while True:
